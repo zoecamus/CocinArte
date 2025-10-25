@@ -1,14 +1,34 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 
+import usuarioRoutes from "./routes/usuarioRoutes.js";
+import libroRoutes from "./routes/libroRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
+import recetaRoutes from "./routes/recetaRoutes.js";        // << NUEVO
+import valoracionRoutes from "./routes/valoracionRoutes.js"; // << NUEVO
+
+dotenv.config();
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Conectar a tu cluster
-mongoose.connect("mongodb+srv://zcamus_db_user:3U4GCrqDSdwoLvSu@cocinarte.nqf7aic.mongodb.net/FoodShare");
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  "mongodb+srv://zcamus_db_user:3U4GCrqDSdwoLvSu@cocinarte.nqf7aic.mongodb.net/FoodShare";
 
-app.get("/", (req, res) => res.send("API de CocinArte funcionando ✅"));
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
+  .catch(err => console.error("❌ Error al conectar a Mongo:", err));
 
-app.listen(3000, () => console.log("Servidor en http://localhost:3000"));
+app.use("/usuarios", usuarioRoutes);
+app.use("/libros", libroRoutes);
+app.use("/videos", videoRoutes);
+app.use("/recetas", recetaRoutes);            // << NUEVO
+app.use("/valoraciones", valoracionRoutes);   // << NUEVO
+
+app.get("/", (_req, res) => res.send("API de CocinArte funcionando ✅"));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 http://localhost:${PORT}`));
