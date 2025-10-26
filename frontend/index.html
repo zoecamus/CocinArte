@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CocinArte 🍳</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="encabezado">
+    <h1>🍽️ CocinArte</h1>
+    <p>Buscá recetas, libros o videos deliciosos por ingrediente o palabra clave</p>
+  </header>
+
+  <main class="contenedor">
+    <div class="buscador">
+      <select id="tipoBusqueda">
+        <option value="recetas">🍰 Recetas</option>
+        <option value="libros">📘 Libros</option>
+        <option value="videos">🎥 Videos</option>
+      </select>
+
+      <input type="text" id="busquedaInput" placeholder="Ejemplo: harina, huevo, sal..." />
+
+      <select id="categoriaSelect">
+        <option value="">Todas las categorías</option>
+        <option value="Postre">Postres</option>
+        <option value="Panadería">Panadería</option>
+        <option value="Principal">Platos principales</option>
+      </select>
+
+      <div class="filtros">
+        <label><input type="checkbox" value="vegano" class="especificacion"> Vegano</label>
+        <label><input type="checkbox" value="vegetariano" class="especificacion"> Vegetariano</label>
+        <label><input type="checkbox" value="celiaco" class="especificacion"> Celíaco</label>
+      </div>
+         <button id="buscarBtn" type="button" class="btn">🔍 Buscar</button>
+
+    </div>
+
+    <div id="resultados" class="resultados"></div>
+  </main>
+
+  <footer>
+    ✨ Hecho con amor por CocinArte © 2025
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -3,50 +3,76 @@ import Receta from "../models/receta.js";
 
 const router = express.Router();
 
-// GET todas
+// 🔹 Quita tildes y pasa a minúsculas
+function normalizarTexto(texto) {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+// --- Obtener todas las recetas
 router.get("/", async (_req, res) => {
   const recetas = await Receta.find();
   res.json(recetas);
 });
 
-// GET por ingrediente (exacto; para regex usar /buscar?q=harina)
-router.get("/ingrediente/:nombre", async (req, res) => {
-  const { nombre } = req.params;
-  const recetas = await Receta.find({ ingredientes: nombre });
-  res.json(recetas);
-});
-
-// GET búsqueda flexible ?q=harina
+// --- Búsqueda avanzada
 router.get("/buscar", async (req, res) => {
-  const q = req.query.q || "";
-  const recetas = await Receta.find({ ingredientes: { $regex: q, $options: "i" } });
-  res.json(recetas);
-});
+  const { ingredientes, categoria, especificaciones } = req.query;
 
-// GET por autor (usuario)
-router.get("/autor/:usuario_id", async (req, res) => {
-  const { usuario_id } = req.params;
-  const recetas = await Receta.find({ autor_usuario_id: Number(usuario_id) });
-  res.json(recetas);
-});
+  try {
+    const condicionesAND = [];
 
-// POST crear
-router.post("/", async (req, res) => {
-  const nueva = new Receta(req.body);
-  await nueva.save();
-  res.json({ mensaje: "Receta creada", receta: nueva });
-});
+    // --- Ingredientes
+    if (ingredientes && ingredientes.trim() !== "") {
+      const lista = ingredientes
+        .split(/,| y /i)
+        .map(i => normalizarTexto(i.trim()))
+        .filter(i => i.length > 0);
 
-// PATCH actualizar media_valoracion (opcional)
-router.patch("/:id_receta/media", async (req, res) => {
-  const { id_receta } = req.params;
-  const { media_valoracion } = req.body;
-  const r = await Receta.findOneAndUpdate(
-    { id_receta: Number(id_receta) },
-    { media_valoracion },
-    { new: true }
-  );
-  res.json(r);
+      condicionesAND.push({
+        $or: lista.map(nombre => ({
+          "ingredientes.nombre": { $regex: new RegExp(nombre + "s?", "i") }
+        }))
+      });
+    }
+
+    // --- Categoría
+    if (categoria && categoria.trim() !== "" && categoria !== "Todas las categorías") {
+      const normalizada = normalizarTexto(categoria.replace(/s$/i, "").trim());
+      condicionesAND.push({ categoria: { $regex: new RegExp(normalizada, "i") } });
+    }
+
+    // --- Especificaciones
+    if (especificaciones && especificaciones.trim() !== "") {
+      const listaEsp = especificaciones
+        .split(/,| y /i)
+        .map(e => normalizarTexto(e.trim()))
+        .filter(e => e.length > 0);
+
+      listaEsp.forEach(etiqueta => {
+        condicionesAND.push({
+          especificaciones: { $regex: new RegExp(etiqueta, "i") }
+        });
+      });
+    }
+
+    // --- Combinar condiciones
+    const filtro = condicionesAND.length > 0 ? { $and: condicionesAND } : {};
+
+    console.log("🧩 Filtro generado (recetas):", JSON.stringify(filtro, null, 2));
+
+    const recetas = await Receta.find(filtro);
+
+    if (!recetas.length)
+      return res.status(404).json({ mensaje: "No se encontraron recetas con esos filtros" });
+
+    res.json(recetas);
+  } catch (error) {
+    console.error("Error al buscar recetas:", error);
+    res.status(500).json({ error: "Error al buscar recetas" });
+  }
 });
 
 export default router;

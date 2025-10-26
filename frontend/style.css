@@ -1,0 +1,270 @@
+/* === ESTILOS BASE === */
+* {
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #fffaf3;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* === ENCABEZADO === */
+.encabezado {
+  background: linear-gradient(90deg, #ffb74d, #ffa726);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.encabezado h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.encabezado p {
+  font-size: 1.1rem;
+}
+
+/* === BUSCADOR === */
+.contenedor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.buscador {
+  background-color: #fff3e0;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.buscador input,
+.buscador select {
+  padding: 0.7rem;
+  width: 100%;
+  max-width: 350px;
+  border: 2px solid #ffa726;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+#buscarBtn {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+#buscarBtn:hover {
+  background-color: #fb8c00;
+}
+
+/* === FILTROS === */
+.filtros {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filtros label {
+  background-color: #fff;
+  border: 2px solid #ffa726;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filtros input {
+  margin-right: 0.3rem;
+}
+
+.filtros label:hover {
+  background-color: #ffe0b2;
+}
+
+/* === RESULTADOS === */
+.resultados {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.tarjeta {
+  background-color: #fffdf9;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  border: 2px solid #ffe0b2;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.tarjeta:hover {
+  transform: scale(1.03);
+}
+
+.tarjeta h3 {
+  color: #e65100;
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta p {
+  margin-bottom: 0.4rem;
+}
+
+/* === FOOTER === */
+footer {
+  background: #ffb74d;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+  font-size: 0.95rem;
+}
+
+/* === DETALLE DE RECETA === */
+.detalle-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  background-color: #fffaf3;
+}
+
+.detalle-tarjeta {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  max-width: 700px;
+  width: 100%;
+  padding: 2rem;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.detalle-titulo {
+  border-bottom: 2px solid #ffe0b2;
+  margin-bottom: 1rem;
+}
+
+.detalle-titulo h2 {
+  color: #e65100;
+  margin-bottom: 0.3rem;
+}
+
+.detalle-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  background-color: #fff8e1;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+}
+
+.ingredientes-lista,
+.pasos-lista {
+  margin-left: 1.5rem;
+}
+
+.volver-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: #ffa726;
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.volver-btn:hover {
+  background: #fb8c00;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.detalle-link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  background: #ffa726;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.detalle-link:hover {
+  background: #fb8c00;
+}
+
+select {
+  padding: 0.7rem;
+  border: 2px solid #ffa726;
+  border-radius: 8px;
+  background-color: #fff8e1;
+  font-weight: 600;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
+  font-weight: 600;
+}
+
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.filtros label {
+  background-color: #fff;
+  border: 2px solid #ffa726;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filtros input {
+  margin-right: 0.3rem;
+}
+
+.filtros label:hover {
+  background-color: #ffe0b2;
+}

@@ -1,9 +1,33 @@
-const mongoose = require('mongoose');
-const libroSchema = new mongoose.Schema({
-  titulo: { type: String, required: true },
-  descripcion: { type: String },
-  id_usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  recetas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receta' }],
-  fecha_creacion: { type: Date, default: Date.now }
-}, { collection: 'Libro' });
-module.exports = mongoose.model('Libro', libroSchema);
+import mongoose from "mongoose";
+
+const libroSchema = new mongoose.Schema(
+  {
+    id_libro: { type: Number, required: true, unique: true },
+    titulo: { type: String, required: true },
+    link: { type: String },
+    descripcion: { type: String },
+    usuario_id: { type: Number, required: true },
+
+    // Lista de ingredientes (igual que recetas)
+    ingredientes: [
+      {
+        nombre: String,
+        cantidad: Number,
+        unidad: String,
+      },
+    ],
+
+    // Array de strings tipo ["vegano", "celiaco", ...]
+    especificaciones: [
+      {
+        type: String,
+        enum: ["vegano", "vegetariano", "celiaco", "sin lactosa", "sin azúcar", "omnivoro"],
+      },
+    ],
+
+    fecha_publicacion: { type: Date, default: Date.now },
+  },
+  { collection: "Libro" }
+);
+
+export default mongoose.model("Libro", libroSchema);
