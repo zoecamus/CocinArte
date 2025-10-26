@@ -4,7 +4,7 @@
 
 // Quita tildes y pasa a minúsculas
 function normalizarTexto(texto) {
-  return texto
+  return (texto || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
@@ -14,17 +14,16 @@ function normalizarTexto(texto) {
 // 🎯 FUNCIÓN PRINCIPAL
 // =======================
 async function buscar() {
-  const tipo = document.getElementById("tipo").value; // Recetas | Libros | Videos
-  const ingredienteInput = document.getElementById("ingrediente");
-  const categoriaSelect = document.getElementById("categoria");
+  const tipo = document.getElementById("tipoBusqueda")?.value || "recetas"; // recetas | libros | videos
+  const ingredienteInput = document.getElementById("busquedaInput");
+  const categoriaSelect = document.getElementById("categoriaSelect");
   const checkboxes = document.querySelectorAll(".especificacion");
 
   if (!ingredienteInput || !categoriaSelect) {
     console.error("❌ No se encontraron elementos del formulario.");
     return;
   }
-
-  const ingrediente = normalizarTexto(ingredienteInput.value.trim());
+  const ingrediente = ingredienteInput.value.trim();
   const categoria = categoriaSelect.value;
   const especificacionesSeleccionadas = Array.from(checkboxes)
     .filter(ch => ch.checked)
@@ -36,7 +35,7 @@ async function buscar() {
   const params = new URLSearchParams();
 
   if (ingrediente) params.append("ingredientes", ingrediente);
-  if (categoria && categoria !== "Todas las categorias") params.append("categoria", categoria);
+  if (categoria && categoria !== "Todas las categorías") params.append("categoria", categoria);
   if (especificacionesSeleccionadas) params.append("especificaciones", especificacionesSeleccionadas);
 
   url += params.toString();
@@ -71,9 +70,9 @@ function mostrarResultados(datos, tipo) {
 
   datos.forEach(item => {
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "tarjeta";
 
-    if (tipo === "Recetas") {
+    if (tipo === "recetas") {
       card.innerHTML = `
         <h3>${item.titulo}</h3>
         <p><b>Categoría:</b> ${item.categoria || "-"}</p>
@@ -82,20 +81,18 @@ function mostrarResultados(datos, tipo) {
         <p><b>Ingredientes:</b> ${item.ingredientes?.map(i => i.nombre).join(", ")}</p>
         <p><b>Especificaciones:</b> ${item.especificaciones?.join(", ") || "-"}</p>
       `;
-    } else if (tipo === "Libros") {
+    } else if (tipo === "libros") {
       card.innerHTML = `
         <h3>${item.titulo}</h3>
         <p><b>Descripción:</b> ${item.descripcion}</p>
         <p><b>Ingredientes:</b> ${item.ingredientes?.map(i => i.nombre).join(", ")}</p>
         <p><b>Especificaciones:</b> ${item.especificaciones?.join(", ") || "-"}</p>
-        <a href="${item.link}" target="_blank"><button>Ver libro 📘</button></a>
       `;
-    } else if (tipo === "Videos") {
+    } else if (tipo === "videos") {
       card.innerHTML = `
         <h3>${item.titulo}</h3>
         <p><b>Duración:</b> ${item.duracion} seg</p>
         <p><b>Ingredientes:</b> ${item.ingredientes?.map(i => i.nombre).join(", ")}</p>
-        <a href="${item.url}" target="_blank"><button>Ver video ▶️</button></a>
       `;
     }
 
@@ -115,4 +112,3 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("❌ No se encontró el botón con id='buscarBtn'");
   }
 });
-  

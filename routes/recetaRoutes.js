@@ -19,6 +19,7 @@ router.get("/", async (_req, res) => {
 
 // --- Búsqueda avanzada
 router.get("/buscar", async (req, res) => {
+  console.log("📩 Query recibida desde frontend:", req.query);
   const { ingredientes, categoria, especificaciones } = req.query;
 
   try {
